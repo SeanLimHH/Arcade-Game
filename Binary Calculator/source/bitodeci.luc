@@ -1,0 +1,206 @@
+module bitodeci (
+    input in[8],
+    output hundreds[8][8],
+    output tens[8][8],
+    output ones[8][8]
+  ) {
+    
+    const NUM0_1 = b00111100;
+    const NUM0_2 = b01100110;
+    const NUM0_3 = b01100110;
+    const NUM0_4 = b01100110;
+    const NUM0_5 = b01100110;
+    const NUM0_6 = b01100110;
+    const NUM0_7 = b01100110;
+    const NUM0_8 = b00111100;
+    
+    const NUM1_1 = b00011000;
+    const NUM1_2 = b00111000;
+    const NUM1_3 = b00011000;
+    const NUM1_4 = b00111100;
+    
+    const NUM2_1 = b00111100;
+    const NUM2_2 = b01100110;
+    const NUM2_3 = b00000110;
+    const NUM2_4 = b00001100;
+    const NUM2_5 = b00110000;
+    const NUM2_6 = b01100000;
+    const NUM2_7 = b01111110;
+    
+    const NUM3_1 = b00111100;
+    const NUM3_2 = b01100110;
+    const NUM3_3 = b00000110;
+    const NUM3_4 = b00111000;
+    const NUM3_5 = b00000110;
+    const NUM3_6 = b01100110;
+    const NUM3_7 = b01100110;
+    const NUM3_8 = b00111100;
+    
+    const NUM4_1 = b00001110;
+    const NUM4_2 = b00011110;
+    const NUM4_3 = b00110110;
+    const NUM4_4 = b01100110;
+    const NUM4_5 = b01111110;
+    const NUM4_6 = b00000110;
+    const NUM4_7 = b00000110;
+    const NUM4_8 = b00000110;
+    
+    const NUM5_1 = b01111110;
+    const NUM5_2 = b01100000;
+    const NUM5_3 = b01111100;
+    const NUM5_4 = b00000110;
+    const NUM5_5 = b00000110;
+    const NUM5_6 = b00000110;
+    const NUM5_7 = b01100110;
+    const NUM5_8 = b00111100;
+    
+    const NUM6_1 = b00011100;
+    const NUM6_2 = b00110000;
+    const NUM6_3 = b01100000;
+    const NUM6_4 = b01111100;
+    const NUM6_5 = b01100110;
+    const NUM6_6 = b01100110;
+    const NUM6_7 = b00111100;
+        
+    const NUM7_1 = b01111110;
+    const NUM7_2 = b01100110;
+    const NUM7_3 = b00001100;
+    const NUM7_4 = b00011000;
+    const NUM7_5 = b00011000;
+    const NUM7_6 = b00011000;
+    const NUM7_7 = b00011000;
+    
+    const NUM8_1 = b00111100;
+    const NUM8_2 = b01100110;
+    const NUM8_3 = b01100110;
+    const NUM8_4 = b00111100;
+    const NUM8_5 = b01100110;
+    const NUM8_6 = b01100110;
+    const NUM8_7 = b00111100;
+    
+    const NUM9_1 = b00111100;
+    const NUM9_2 = b01100110;
+    const NUM9_3 = b01100110;
+    const NUM9_4 = b01100110;
+    const NUM9_5 = b00111110;
+    const NUM9_6 = b00000110;
+    const NUM9_7 = b00001100;
+    const NUM9_8 = b00111000;
+    
+    const NUMA_1 = b00011000;
+    const NUMA_2 = b00111100;
+    const NUMA_3 = b01100110;
+    const NUMA_4 = b01100110;
+    const NUMA_5 = b01111110;
+    const NUMA_6 = b01100110;
+    const NUMA_7 = b01100110;
+    const NUMA_8 = b01100110;
+    
+    // B
+    const NUMB_1 = b01111100;
+    const NUMB_2 = b01100110;
+    const NUMB_3 = b01100110;
+    const NUMB_4 = b01111100;
+    const NUMB_5 = b01100110;
+    const NUMB_6 = b01100110;
+    const NUMB_7 = b01100110;
+    const NUMB_8 = b01111100;
+    
+    // C
+    const NUMC_1 = b00111100;
+    const NUMC_2 = b01100110;
+    const NUMC_3 = b01100000;
+    const NUMC_4 = b01100000;
+    const NUMC_5 = b01100000;
+    const NUMC_6 = b01100000;
+    const NUMC_7 = b01100110;
+    const NUMC_8 = b00111100;
+    
+    // D
+    const NUMD_1 = b01111100;
+    const NUMD_2 = b01100110;
+    const NUMD_3 = b01100110;
+    const NUMD_4 = b01100110;
+    const NUMD_5 = b01100110;
+    const NUMD_6 = b01100110;
+    const NUMD_7 = b01100110;
+    const NUMD_8 = b01111100;
+    
+    // E
+    const NUME_1 = b01111110;
+    const NUME_2 = b01100000;
+    const NUME_3 = b01100000;
+    const NUME_4 = b01111100;
+    const NUME_5 = b01100000;
+    const NUME_6 = b01100000;
+    const NUME_7 = b01100000;
+    const NUME_8 = b01111110;
+    // F
+    const NUMF_1 = b01111110;
+    const NUMF_2 = b01100000;
+    const NUMF_3 = b01100000;
+    const NUMF_4 = b01111100;
+    const NUMF_5 = b01100000;
+    const NUMF_6 = b01100000;
+    const NUMF_7 = b01100000;
+    const NUMF_8 = b01100000;
+  
+    const ONE = {NUM1_1, NUM1_2, NUM1_3, NUM1_3, NUM1_3, NUM1_3, NUM1_3, NUM1_4};
+    const TWO = {NUM2_1, NUM2_2, NUM2_3, NUM2_4, NUM2_5, NUM2_6, NUM2_6, NUM2_7};
+    const THREE = {NUM3_1, NUM3_2, NUM3_3, NUM3_4, NUM3_5, NUM3_6, NUM3_7, NUM3_8};
+    const FOUR = {NUM4_1, NUM4_2, NUM4_3, NUM4_4, NUM4_5, NUM4_6, NUM4_7, NUM4_8};
+    const FIVE = {NUM5_1, NUM5_2, NUM5_3, NUM5_4, NUM5_5, NUM5_6, NUM5_7, NUM5_8};
+    const SIX = {NUM6_1, NUM6_2, NUM6_3, NUM6_4, NUM6_5, NUM6_6,NUM6_6 , NUM6_7};
+    const SEVEN = {NUM7_1, NUM7_2, NUM7_3, NUM7_4, NUM7_5, NUM7_6, NUM7_7, NUM7_7};
+    const EIGHT = {NUM8_1, NUM8_2, NUM8_3, NUM8_4, NUM8_5, NUM8_6, NUM8_6, NUM8_7};
+    const NINE = {NUM9_1, NUM9_2, NUM9_3, NUM9_4, NUM9_5, NUM9_6, NUM9_7, NUM9_8};
+    const ZERO = {NUM0_1, NUM0_2,NUM0_3, NUM0_4, NUM0_5, NUM0_6, NUM0_7, NUM0_8};
+    const A = {NUMA_1, NUMA_2, NUMA_3, NUMA_4, NUMA_5, NUMA_6, NUMA_7, NUMA_8};
+    const B = {NUMB_1, NUMB_2, NUMB_3, NUMB_4, NUMB_5, NUMB_6, NUMB_7, NUMB_8};
+    const C = {NUMC_1, NUMC_2, NUMC_3, NUMC_4, NUMC_5, NUMC_6, NUMC_7, NUMC_8};
+    
+    const D = {NUMD_1, NUMD_2, NUMD_3, NUMD_4, NUMD_5, NUMD_6, NUMD_7, NUMD_8};
+    const E = {NUME_1, NUME_2, NUME_3, NUME_4, NUME_5, NUME_6, NUME_7, NUME_8};
+    const F = {NUMF_1, NUMF_2, NUMF_3, NUMF_4, NUMF_5, NUMF_6, NUMF_7, NUMF_8};
+  
+    const D1 = $reverse({ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE, A, B, C, D, E, F});
+  
+    var boolean;
+    var i;
+    var totaldeci;
+    var onesval;
+    var tensval;
+    var hundredsval;
+  
+  always {
+    totaldeci = in[7]*128 + in[6]*64 + in[5]*32 + in[4]*16 + in[3]*8 + in[2]*4 + in[1]*2 + in[0]*1;
+    boolean = 0;
+    for (i=1;i<11;i++){
+      if ( boolean == 0 & i*100 > totaldeci ){
+        boolean = 1;
+        hundredsval = i-1;
+        totaldeci = totaldeci - hundredsval*100;
+      }
+    }
+    boolean=0;
+    for (i=1;i<11;i++){
+      if ( boolean == 0 & i*10 > totaldeci ){
+        boolean = 1;
+        tensval = i-1;
+        totaldeci = totaldeci - tensval*10;
+      }
+    }
+    boolean=0;
+    for (i=1;i<11;i++){
+      if ( boolean == 0 & i > totaldeci ){
+        boolean = 1;
+        onesval = i-1;
+        totaldeci = totaldeci - onesval;
+      }
+    }
+    
+    ones = D1[onesval];
+    tens = D1[tensval];
+    hundreds = D1[hundredsval];
+  }
+}

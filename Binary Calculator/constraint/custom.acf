@@ -1,0 +1,57 @@
+pin clk CLOCK;
+clock clk 100MHz;
+
+
+
+
+pin rst_n RESET;
+
+// flip the Tx/Rx lines
+pin usb_rx USB_TX;
+pin usb_tx USB_RX;
+
+
+
+
+
+
+pin matrix_timer[0] D43; /// CLOCK / clk output #output matrix_timer[3]
+pin matrix_timer[1] D42; //  CS    / load 
+pin matrix_timer[2] D8; //  DATA  / Dinv
+pin matrix_score[0] C30; /// CLOCK / clk output #output matrix_score[3]
+pin matrix_score[1] C20; //  CS    / load 
+pin matrix_score[2] C21; //  DATA  / Din
+pin matrix_operator[0] C42; /// CLOCK / clk output #output matrix_operator[3]
+pin matrix_operator[1] C8; //  CS    / load 
+pin matrix_operator[2] C9; //  DATA  / Din
+pin matrix_working[0] C48; /// CLOCK / clk output #output matrix_working[3]
+pin matrix_working[1] C2; //  CS    / load kjkjkj
+pin matrix_working[2] C3; //  DATA  / Din
+
+pin led_green[0] A23 pulldown; //#output led_blue[5]
+pin led_green[1] A20 pulldown;
+pin led_green[2] A17 pulldown;
+pin led_green[3] A14 pulldown;
+pin led_green[4] A11 pulldown;
+
+pin led_blue[0] B21 pulldown; //#output led_blue[8]
+pin led_blue[1] B18 pulldown;
+pin led_blue[2] B15 pulldown;
+pin led_blue[3] B12 pulldown;
+pin led_blue[4] B20 pulldown;
+pin led_blue[5] B17 pulldown;
+pin led_blue[6] B14 pulldown;
+pin led_blue[7] B11 pulldown;
+
+
+pin arcade_button[0] A28 pulldown;   // #input arcade_button[10]
+pin arcade_button[1] A31 pulldown;
+pin arcade_button[2] A34 pulldown;
+pin arcade_button[3] A37 pulldown;
+pin arcade_button[4] A40 pulldown;
+
+pin arcade_button[5] B27 pulldown;
+pin arcade_button[6] B30 pulldown;
+pin arcade_button[7] B33 pulldown;
+pin arcade_button[8] B36 pulldown;
+pin arcade_button[9] B39 pulldown;

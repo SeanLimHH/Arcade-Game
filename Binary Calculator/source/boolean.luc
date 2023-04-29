@@ -1,0 +1,18 @@
+module boolean (
+    input a[4],  
+    input b[4], 
+    input alufn[2],
+    output out[1]
+  ) 
+{
+
+  always {
+  
+    case(alufn[1:0]){
+    b11: out = a & b; //and
+    default:
+      out = 0;
+        
+  }
+}
+}

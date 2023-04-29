@@ -1,0 +1,38 @@
+module alu (
+    input alufn[2],
+    input inputStringA[4],
+    input inputStringB[4],
+    output out[8]
+  ) {
+  
+  adder adderUnit;
+  multiplier multiplyUnit;
+  boolean booleanUnit;
+
+  always {
+    adderUnit.a = inputStringA;
+    adderUnit.b = inputStringB;
+    adderUnit.alufn = alufn;
+    
+    multiplyUnit.a = inputStringA;
+    multiplyUnit.b = inputStringB;
+    multiplyUnit.alufn = alufn;
+    
+    booleanUnit.a = inputStringA;
+    booleanUnit.b = inputStringB;
+    booleanUnit.alufn = alufn;
+    
+    case (alufn[1:0]) {
+      default:
+        out = 0;
+      b00: // Adder
+        out = adderUnit.out;
+      b01: // Multiply
+        out = multiplyUnit.out;
+      b10: // Boolean
+        out = booleanUnit.out;
+        
+    }
+  }
+
+}

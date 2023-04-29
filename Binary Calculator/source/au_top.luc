@@ -1,0 +1,500 @@
+module au_top (
+    input clk,              // 100MHz clock
+    input rst_n,            // reset button (active low)
+    input usb_rx,           // USB->Serial input
+    output usb_tx,          // USB->Serial output
+    input arcade_button[10],
+    output led_blue[8],
+    output led_green[5],
+    output matrix_operator[3],
+    output matrix_score[3],
+    output matrix_working[3],
+    output matrix_timer[3]
+
+  ) {
+      const BLANK = b00000000;
+      const P1 = b00011000;
+      const P2 = b01111110;
+      const M1 = b00000000;
+      const M2 = b01100110;
+      const M3 = b01111110;
+      const M4 = b00111100;
+      
+      const NUM0_1 = b00111100;
+      const NUM0_2 = b01100110;
+      const NUM0_3 = b01100110;
+      const NUM0_4 = b01100110;
+      const NUM0_5 = b01100110;
+      const NUM0_6 = b01100110;
+      const NUM0_7 = b01100110;
+      const NUM0_8 = b00111100;
+      
+      const NUM1_1 = b00011000;
+      const NUM1_2 = b00111000;
+      const NUM1_3 = b00011000;
+      const NUM1_4 = b00111100;
+      
+      const NUM2_1 = b00111100;
+      const NUM2_2 = b01100110;
+      const NUM2_3 = b00000110;
+      const NUM2_4 = b00001100;
+      const NUM2_5 = b00110000;
+      const NUM2_6 = b01100000;
+      const NUM2_7 = b01111110;
+      
+      const NUM3_1 = b00111100;
+      const NUM3_2 = b01100110;
+      const NUM3_3 = b00000110;
+      const NUM3_4 = b00111000;
+      const NUM3_5 = b00000110;
+      const NUM3_6 = b01100110;
+      const NUM3_7 = b01100110;
+      const NUM3_8 = b00111100;
+      
+      const NUM4_1 = b00001110;
+      const NUM4_2 = b00011110;
+      const NUM4_3 = b00110110;
+      const NUM4_4 = b01100110;
+      const NUM4_5 = b01111110;
+      const NUM4_6 = b00000110;
+      const NUM4_7 = b00000110;
+      const NUM4_8 = b00000110;
+      
+      const NUM5_1 = b01111110;
+      const NUM5_2 = b01100000;
+      const NUM5_3 = b01111100;
+      const NUM5_4 = b00000110;
+      const NUM5_5 = b00000110;
+      const NUM5_6 = b00000110;
+      const NUM5_7 = b01100110;
+      const NUM5_8 = b00111100;
+      
+      const NUM6_1 = b00011100;
+      const NUM6_2 = b00110000;
+      const NUM6_3 = b01100000;
+      const NUM6_4 = b01111100;
+      const NUM6_5 = b01100110;
+      const NUM6_6 = b01100110;
+      const NUM6_7 = b00111100;
+            
+      const NUM7_1 = b01111110;
+      const NUM7_2 = b01100110;
+      const NUM7_3 = b00001100;
+      const NUM7_4 = b00011000;
+      const NUM7_5 = b00011000;
+      const NUM7_6 = b00011000;
+      const NUM7_7 = b00011000;
+      
+      const NUM8_1 = b00111100;
+      const NUM8_2 = b01100110;
+      const NUM8_3 = b01100110;
+      const NUM8_4 = b00111100;
+      const NUM8_5 = b01100110;
+      const NUM8_6 = b01100110;
+      const NUM8_7 = b00111100;
+      
+      const NUM9_1 = b00111100;
+      const NUM9_2 = b01100110;
+      const NUM9_3 = b01100110;
+      const NUM9_4 = b01100110;
+      const NUM9_5 = b00111110;
+      const NUM9_6 = b00000110;
+      const NUM9_7 = b00001100;
+      const NUM9_8 = b00111000;
+      
+      const NUMA_1 = b00011000;
+      const NUMA_2 = b00111100;
+      const NUMA_3 = b01100110;
+      const NUMA_4 = b01100110;
+      const NUMA_5 = b01111110;
+      const NUMA_6 = b01100110;
+      const NUMA_7 = b01100110;
+      const NUMA_8 = b01100110;
+      
+      // B
+      const NUMB_1 = b01111100;
+      const NUMB_2 = b01100110;
+      const NUMB_3 = b01100110;
+      const NUMB_4 = b01111100;
+      const NUMB_5 = b01100110;
+      const NUMB_6 = b01100110;
+      const NUMB_7 = b01100110;
+      const NUMB_8 = b01111100;
+      
+      // C
+      const NUMC_1 = b00111100;
+      const NUMC_2 = b01100110;
+      const NUMC_3 = b01100000;
+      const NUMC_4 = b01100000;
+      const NUMC_5 = b01100000;
+      const NUMC_6 = b01100000;
+      const NUMC_7 = b01100110;
+      const NUMC_8 = b00111100;
+      
+      // D
+      const NUMD_1 = b01111100;
+      const NUMD_2 = b01100110;
+      const NUMD_3 = b01100110;
+      const NUMD_4 = b01100110;
+      const NUMD_5 = b01100110;
+      const NUMD_6 = b01100110;
+      const NUMD_7 = b01100110;
+      const NUMD_8 = b01111100;
+      
+      // E
+      const NUME_1 = b01111110;
+      const NUME_2 = b01100000;
+      const NUME_3 = b01100000;
+      const NUME_4 = b01111100;
+      const NUME_5 = b01100000;
+      const NUME_6 = b01100000;
+      const NUME_7 = b01100000;
+      const NUME_8 = b01111110;
+      // F
+      const NUMF_1 = b01111110;
+      const NUMF_2 = b01100000;
+      const NUMF_3 = b01100000;
+      const NUMF_4 = b01111100;
+      const NUMF_5 = b01100000;
+      const NUMF_6 = b01100000;
+      const NUMF_7 = b01100000;
+      const NUMF_8 = b01100000;
+        
+      const PLUS = {BLANK,P1,P1,P2,P2,P1,P1,BLANK};
+      const TIMES = {M1,M2,M3,M4,M4,M3,M2,M1};
+      const ONE = {NUM1_1, NUM1_2, NUM1_3, NUM1_3, NUM1_3, NUM1_3, NUM1_3, NUM1_4};
+      const TWO = {NUM2_1, NUM2_2, NUM2_3, NUM2_4, NUM2_5, NUM2_6, NUM2_6, NUM2_7};
+      const THREE = {NUM3_1, NUM3_2, NUM3_3, NUM3_4, NUM3_5, NUM3_6, NUM3_7, NUM3_8};
+      const FOUR = {NUM4_1, NUM4_2, NUM4_3, NUM4_4, NUM4_5, NUM4_6, NUM4_7, NUM4_8};
+      const FIVE = {NUM5_1, NUM5_2, NUM5_3, NUM5_4, NUM5_5, NUM5_6, NUM5_7, NUM5_8};
+      const SIX = {NUM6_1, NUM6_2, NUM6_3, NUM6_4, NUM6_5, NUM6_6,NUM6_6 , NUM6_7};
+      const SEVEN = {NUM7_1, NUM7_2, NUM7_3, NUM7_4, NUM7_5, NUM7_6, NUM7_7, NUM7_7};
+      const EIGHT = {NUM8_1, NUM8_2, NUM8_3, NUM8_4, NUM8_5, NUM8_6, NUM8_6, NUM8_7};
+      const NINE = {NUM9_1, NUM9_2, NUM9_3, NUM9_4, NUM9_5, NUM9_6, NUM9_7, NUM9_8};
+      const ZERO = {NUM0_1, NUM0_2,NUM0_3, NUM0_4, NUM0_5, NUM0_6, NUM0_7, NUM0_8};
+      const A = {NUMA_1, NUMA_2, NUMA_3, NUMA_4, NUMA_5, NUMA_6, NUMA_7, NUMA_8};
+      const B = {NUMB_1, NUMB_2, NUMB_3, NUMB_4, NUMB_5, NUMB_6, NUMB_7, NUMB_8};
+      const C = {NUMC_1, NUMC_2, NUMC_3, NUMC_4, NUMC_5, NUMC_6, NUMC_7, NUMC_8};
+      
+      const D = {NUMD_1, NUMD_2, NUMD_3, NUMD_4, NUMD_5, NUMD_6, NUMD_7, NUMD_8};
+      const E = {NUME_1, NUME_2, NUME_3, NUME_4, NUME_5, NUME_6, NUME_7, NUME_8};
+      const F = {NUMF_1, NUMF_2, NUMF_3, NUMF_4, NUMF_5, NUMF_6, NUMF_7, NUMF_8};
+      
+      const BLANKFULL = $reverse({BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK});
+      const D1 = $reverse({ZERO,ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,A,B,C,D,E,F});
+        
+      const QN1 = $reverse({THREE,PLUS,F});
+      const QN2 = $reverse({A,PLUS,TWO});
+      const QN3 = $reverse({FIVE,TIMES,NINE});
+      const QN4 = $reverse({EIGHT,TIMES,EIGHT});
+      const QN5 = $reverse({A,PLUS,B});
+      const QN6 = $reverse({THREE,TIMES,C});
+      const QN7 = $reverse({SIX,TIMES,SEVEN});
+      const QN8 = $reverse({F,TIMES,F});
+      const QN9 = $reverse({A,TIMES,B});
+      const QN10 = $reverse({B,PLUS,C});
+      const QN11 = $reverse({D,TIMES,NINE});
+          
+      const ANS1 = b00010010;
+      const ANS2 = b00001100;
+      const ANS3 = b00101101;
+      const ANS4 = b01000000;
+      const ANS5 = b00010101;
+      const ANS6 = b00100100;
+      const ANS7 = b00101010;
+      const ANS8 = b11111111;
+      const ANS9 = b01101110;
+      const ANS10 = b00010111;
+      const ANS11 = b11100001;
+      
+      const QUESTIONS = $reverse( {QN1,QN2,QN3,QN4,QN5,QN6,QN7,QN8,QN9,QN10,QN11} );
+      const ANSWERS = $reverse( {ANS1,ANS2,ANS3,ANS4,ANS5,ANS6,ANS7,ANS8,ANS9,ANS10,ANS11} );
+    
+      sig selectionIndex[4];
+      
+      sig scoreSignal[8][32];
+      sig timerSignal[8][32];
+      sig operatorSignal[8][32];
+      sig workingSignal[8][32];
+      sig rst;                  // reset signal
+      bin_to_dec convert(#DIGITS(2));
+  
+.clk(clk){
+
+    // All buttons
+    button_conditioner blueButton1;
+    edge_detector blueButton1Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner blueButton2;
+    edge_detector blueButton2Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner blueButton3;
+    edge_detector blueButton3Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner blueButton4;
+    edge_detector blueButton4Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner blueButton5;
+    edge_detector blueButton5Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner blueButton6;
+    edge_detector blueButton6Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner blueButton7;
+    edge_detector blueButton7Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner blueButton8;
+    edge_detector blueButton8Edge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner confirmationButton;
+    edge_detector confirmationButtonEdge(#RISE(1), #FALL(0)); //detect on rising edge only
+    
+    button_conditioner resetButton;
+    edge_detector resetButtonEdge(#RISE(1), #FALL(0)); //detect on rising edge only
+  
+    edge_detector countdown;
+  
+    .rst(rst){
+    max7219_driver timerDriver(#CHAIN(4), #SPEED(4));
+      
+    max7219_driver scoreDriver(#CHAIN(4), #SPEED(4));
+    max7219_driver workingDriver(#CHAIN(4), #SPEED(4));
+    max7219_driver operatorDriver(#CHAIN(4), #SPEED(4));
+
+    counter slowClock(#SIZE(1),#DIV(27));
+    dff selectionDff[4](#INIT(0));
+    dff greenlight[5](#INIT(0));
+    dff playerScore[16](#INIT(0));
+    dff binaryInputLed[16](#INIT(0));
+    dff checksAndTimer[16](#INIT(0));
+    fsm timerfsm = {CHECK};
+    fsm gameStates={
+      INITIALISATION,
+      READING,
+      GAMEOVER
+    };
+      }
+  }
+  var x;
+
+  bitodeci timerDisplay;
+  bitodeci scoreDisplay;
+  bitodeci workingDisplay;
+  
+  always {
+    
+    usb_tx = usb_rx; // loop serial port
+    
+    selectionIndex = selectionDff.q;
+    convert.value = selectionIndex;
+    
+    led_blue = binaryInputLed.q[7:0];
+    led_green = greenlight.q;
+    
+    countdown.in = slowClock.value; // Increments by 1 every 2^26 cycles
+    timerDisplay.in = checksAndTimer.q[9:4];
+    workingDisplay.in = binaryInputLed.q[7:0];
+    scoreDisplay.in = playerScore.q[15:11];
+    
+    //set display adapter for timer
+    for (x=0 ; x < 8; x++) {
+    timerSignal[x] = c{D1[0][x],D1[0][x],BLANKFULL[x],BLANKFULL[x]};
+      }
+    timerDriver.new = 0;
+    timerDriver.segment_values = timerSignal;
+    
+        //set display adapter for score
+    for (x=0 ; x < 8; x++) {
+    scoreSignal[x] = c{D1[0][x],D1[0][x],BLANKFULL[x],BLANKFULL[x]};
+      }
+    scoreDriver.new = 0;
+    scoreDriver.segment_values = scoreSignal;
+    
+            //set display adapter for operator
+    for (x=0 ; x < 8; x++) {
+    operatorSignal[x] = c{D1[0][x],D1[0][x],D1[0][x],BLANKFULL[x]};
+      }
+    operatorDriver.new = 0;
+    operatorDriver.segment_values = operatorSignal;
+    
+                //set display adapter for working
+    for (x=0 ; x < 8; x++) {
+    workingSignal[x] = c{D1[3][x],D1[6][x],D1[9][x],BLANKFULL[x]};
+      }
+    workingDriver.new = 0;
+    workingDriver.segment_values = workingSignal;
+
+    blueButton1.in =   arcade_button[7] ; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton1Edge.in = blueButton1.out;
+        
+    blueButton2.in = arcade_button[6]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton2Edge.in = blueButton2.out;
+        
+    blueButton3.in = arcade_button[5]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton3Edge.in = blueButton3.out;
+    
+    blueButton4.in = arcade_button[4]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton4Edge.in = blueButton4.out;
+        
+    blueButton5.in = arcade_button[3]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton5Edge.in = blueButton5.out;
+       
+    blueButton6.in = arcade_button[2]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton6Edge.in = blueButton6.out;
+    
+    blueButton7.in = arcade_button[1]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton7Edge.in = blueButton7.out;
+      
+    blueButton8.in = arcade_button[0]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    blueButton8Edge.in = blueButton8.out;
+      
+    resetButton.in = arcade_button[8]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    resetButtonEdge.in = resetButton.out;
+          
+    confirmationButton.in = arcade_button[9]; // TODO: CHANGE THE WIRING TO BANK INDEX
+    confirmationButtonEdge.in = confirmationButton.out;    
+
+    if (resetButtonEdge.out) { // INITIALISATION
+      gameStates.d = gameStates.INITIALISATION;
+    }
+    
+    case (gameStates.q) {
+      gameStates.INITIALISATION:
+        playerScore.d[15:10] = b000000; //TODO set back to 0, now is init as 11 for testing
+        binaryInputLed.d[15:11] = b00001;
+        binaryInputLed.d[7:0] = 0;
+        checksAndTimer.d[15:10] = 0;
+        checksAndTimer.d[9:4] = b00111100; // Timer
+        greenlight.d = b00000;
+        selectionDff.d = 0;
+
+        gameStates.d = gameStates.READING;
+          
+      gameStates.READING:
+        
+        for (x=0 ; x < 8; x++) {
+          timerSignal[x] = c{timerDisplay.tens[x],timerDisplay.ones[x],BLANKFULL[x],BLANKFULL[x]};
+            }
+        timerDriver.new = 0;
+        timerDriver.segment_values = timerSignal; 
+        led_blue = binaryInputLed.q[7:0];   
+        
+        for (x=0 ; x < 8; x++) {
+        workingSignal[x] = c{workingDisplay.hundreds[x],workingDisplay.tens[x],workingDisplay.ones[x],BLANKFULL[x]};
+        }
+        workingDriver.new = 0;
+        workingDriver.segment_values = workingSignal;
+        
+        for (x=0 ; x < 8; x++) {
+        scoreSignal[x] = c{scoreDisplay.tens[x],scoreDisplay.ones[x],BLANKFULL[x],BLANKFULL[x]};
+        }
+        scoreDriver.new = 0;
+        scoreDriver.segment_values = scoreSignal;
+        
+        for (x=0 ; x < 8; x++) {
+        operatorSignal[x] = c{QUESTIONS[c{convert.digits[0]}][0][x],QUESTIONS[c{convert.digits[0]}][1][x],QUESTIONS[c{convert.digits[0]}][2][x],BLANKFULL[x]};
+        }
+        operatorDriver.new = 0;
+        operatorDriver.segment_values = operatorSignal;
+
+        timerfsm.d = timerfsm.CHECK;
+        case(timerfsm.q){
+          timerfsm.CHECK  : 
+
+                  if (countdown.out) { // This line enables a slower clock for code inside it.
+                  // Code inside here runs ONE TIME per if condition true, LITERALLY.                   
+                    timerDriver.new = 1;
+                    scoreDriver.new = 1;
+                    operatorDriver.new = 1;
+                    workingDriver.new = 1;
+                    if (checksAndTimer.q[9:4] == 0) {
+                        gameStates.d = gameStates.GAMEOVER;
+                    }
+                    checksAndTimer.d[9:4] = checksAndTimer.q[9:4]-1;
+                    greenlight.d = greenlight.q+1;
+                    }}
+                
+          if (confirmationButtonEdge.out) {
+            if ( binaryInputLed.q[7:0] == ANSWERS[convert.digits[0]]) {
+              scoreDriver.new =1;
+              playerScore.d[15:11] = playerScore.q[15:11] + 1;
+              binaryInputLed.d[7:0] = b00000000;
+              selectionDff.d = selectionDff.q + 1;
+              }
+          }
+        
+        // Read button presses here
+        if (blueButton1Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[0] == 0) {binaryInputLed.d[0] = 1;}
+            else { binaryInputLed.d[0] = 0;}
+            }
+        
+        if (blueButton2Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[1] == 0) {binaryInputLed.d[1] = 1;}
+            else { binaryInputLed.d[1] = 0;}
+        }
+            
+            
+        if (blueButton3Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[2] == 0) {binaryInputLed.d[2] = 1;}
+            else { binaryInputLed.d[2] = 0;}
+        }
+            
+        if (blueButton4Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[3] == 0) {binaryInputLed.d[3] = 1;}
+            else { binaryInputLed.d[3] = 0;}
+        }
+        
+        if (blueButton5Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[4] == 0) {binaryInputLed.d[4] = 1;}
+            else { binaryInputLed.d[4] = 0;}
+        }
+        
+        if (blueButton6Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[5] == 0) {binaryInputLed.d[5] = 1;}
+            else { binaryInputLed.d[5] = 0;}
+        }
+        
+        if (blueButton7Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[6] == 0) {binaryInputLed.d[6] = 1;}
+            else { binaryInputLed.d[6] = 0;}
+        }
+        
+        if (blueButton8Edge.out) { // This block occurs if rising edge is detected. (Button is pressed)
+            if ( binaryInputLed.q[7] == 0) {binaryInputLed.d[7] = 1;}
+            else { binaryInputLed.d[7] = 0;}
+                     } 
+    
+      gameStates.GAMEOVER:
+        checksAndTimer.d[9:4] = b000000;
+        binaryInputLed.d = 0;
+        // Flash values
+        // Turn OFF display? EXCEPT SCORE AND TIMER
+        if (countdown.out) {
+          // Turn back ON DISPLAY
+          }
+        
+        if (resetButtonEdge.out) {
+        
+          gameStates.d = gameStates.INITIALISATION;
+          
+          }
+      }
+    
+    matrix_timer[0] = timerDriver.max7219_clock;
+    matrix_timer[1] = timerDriver.max7219_load; 
+    matrix_timer[2] = timerDriver.max7219_data;
+    
+    matrix_operator[0] = operatorDriver.max7219_clock;
+    matrix_operator[1] = operatorDriver.max7219_load; 
+    matrix_operator[2] = operatorDriver.max7219_data; 
+    
+    matrix_score[0] = scoreDriver.max7219_clock;
+    matrix_score[1] = scoreDriver.max7219_load; 
+    matrix_score[2] = scoreDriver.max7219_data; 
+    
+    matrix_working[0] = workingDriver.max7219_clock;
+    matrix_working[1] = workingDriver.max7219_load; 
+    matrix_working[2] = workingDriver.max7219_data; 
+
+}
