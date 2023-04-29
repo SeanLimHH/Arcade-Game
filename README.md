@@ -3,6 +3,8 @@
 
 ### The idea is to add two hexadecimals and then convert the result into a binary string as many times under 60 seconds.
 
+### [Final design gameplay](https://youtube.com/shorts/iGxqrRCro3M?feature=share)
+
 # The overall design
 ![alt text](https://github.com/SeanLimHH/Arcade-Game/blob/main/Overall%20Design.jpg?raw=true)
 
